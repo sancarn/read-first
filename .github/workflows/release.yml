@@ -5,7 +5,7 @@ on:
     branches:           # (optional) restrict to main branch
       - main
   workflow_dispatch:    # Adds a "Run workflow" button in the Actions tab
-
+  
 permissions:
   contents: write
 
@@ -23,7 +23,7 @@ jobs:
       - name: Package release zip
         shell: pwsh
         run: |
-          $version = "${{ github.ref_name }}"
+          $version = "build-${{ github.run_number }}"
           $packageName = "read-first-$version-windows-x64"
           $packageDir = Join-Path "dist" $packageName
 
@@ -34,7 +34,14 @@ jobs:
 
           Compress-Archive -Path "$packageDir\*" -DestinationPath "dist\$packageName.zip" -Force
 
+      - name: Create Tag
+        run: |
+          git tag build-${{ github.run_number }}
+          git push origin build-${{ github.run_number }}
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: build-${{ github.run_number }}
+          name: Automated build ${{ github.run_number }}
           files: dist/*.zip
