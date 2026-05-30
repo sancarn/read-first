@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build executable
+        run: cargo build --release
+
+      - name: Package release zip
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}"
+          $packageName = "read-first-$version-windows-x64"
+          $packageDir = Join-Path "dist" $packageName
+
+          New-Item -ItemType Directory -Path $packageDir -Force | Out-Null
+          Copy-Item -Path "install.ps1" -Destination $packageDir
+          Copy-Item -Path "uninstall.ps1" -Destination $packageDir
+          Copy-Item -Path "target\release\read-first.exe" -Destination $packageDir
+
+          Compress-Archive -Path "$packageDir\*" -DestinationPath "dist\$packageName.zip" -Force
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
