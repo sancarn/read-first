@@ -1,12 +1,17 @@
-# First Read Context Menu Tools
+# What is "Read First"?
 
-This repo builds one tiny portable Rust app (`read-first.exe`) and adds an Explorer context menu group:
+"Read First" is a simple Windows tool. It adds a new menu when you right-click any file in Explorer, called "Read first...".
 
-- `Read first...` (parent menu)
-  - `Line` - reads and shows only the first line.
-  - `Megabyte` - reads and shows up to the first 1 MB.
+When you use it, two choices show up:
 
-Both entries call the same EXE with different mode flags. Output is shown in a read-only text box (select/copy supported, editing disabled).
+- **Line**: Shows you just the first line of the file.
+- **Megabyte**: Shows you up to the first 1 megabyte (MB) of the file.
+
+![_](./docs/ContextMenu.png)
+
+When you click one of those, a window pops up with the content. You can read and copy the text, but not change it.
+
+![_](./docs/Read-First%20UI.png)
 
 ## Binary placeholder behavior
 

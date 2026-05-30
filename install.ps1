@@ -6,6 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $packageRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sourceExe = Join-Path $packageRoot "read-first.exe"
+$devSourceExe = Join-Path $packageRoot "target\release\read-first.exe"
 $appExe = Join-Path $InstallDir "read-first.exe"
 $legacyAppExe = Join-Path $InstallDir "first-read.exe"
 $legacyAppIcon = Join-Path $InstallDir "app.ico"
@@ -13,7 +14,11 @@ $legacyAppIcon = Join-Path $InstallDir "app.ico"
 Write-Host "Installing to $InstallDir"
 
 if (-not (Test-Path $sourceExe)) {
-    throw "Install failed: $sourceExe was not found. Download the release zip and run install.ps1 from the extracted folder."
+    if (Test-Path $devSourceExe) {
+        $sourceExe = $devSourceExe
+    } else {
+        throw "Install failed: read-first.exe was not found next to install.ps1 or at target\release\read-first.exe. Download the release zip or run cargo build --release first."
+    }
 }
 
 if (-not (Test-Path $InstallDir)) {
