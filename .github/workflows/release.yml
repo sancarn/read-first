@@ -1,9 +1,10 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  push:                 # Run on push
+    branches:           # (optional) restrict to main branch
+      - main
+  workflow_dispatch:    # Adds a "Run workflow" button in the Actions tab
 
 permissions:
   contents: write
