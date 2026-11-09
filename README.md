@@ -1,5 +1,7 @@
 # What is "Read First"?
 
+[AI:X](https://0rwx.com/)
+
 "Read First" is a simple Windows tool. It adds a new menu when you right-click any file in Explorer, called "Read first...".
 
 When you use it, two choices show up:
